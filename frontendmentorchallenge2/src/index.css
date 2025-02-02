@@ -6,7 +6,9 @@
   src: url(/fonts/Inconsolata-VariableFont_wdth,wght.ttf);
 }
 
-
+html{
+  scroll-behavior: smooth;
+}
 
 :root {
   /* Neutres */
@@ -30,11 +32,16 @@ body{
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
-  min-height: 100vh;
+  overscroll-behavior: none;
+  height: fit-content;
+}
+
+header{
+  user-select: none;
 }
   
 h3{
   font-family: Incosolata;
-  font-size:1.25rem;
+  font-size:1rem;
   font-weight: 300;
 }

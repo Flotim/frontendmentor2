@@ -1,28 +1,25 @@
 import './App.css'
 import patternSvgbottom from './assets/pattern-squiggly-line-bottom-desktop.svg';
 import patternSvgtop from './assets/pattern-squiggly-line-top.svg';
-import FileUploader from './components/FileUploader';
+import Form from './components/Form';
 import Header from './components/Header';
-import InputSection from './components/InputSection';
+
 
 function App() {
-
-
-
   return (
-    <>
-      <div className='flex flex-col justify-center items-center'>
+
+      <div className='relative flex flex-col justify-center items-center h-fit'>
         <img src={patternSvgbottom} alt="shape 1"
-          className="absolute bottom-0 left-0 md:w-[500px] w-[350px] opacity-80" />
+          className="-z-10 absolute bottom-0 left-0 md:w-[500px] w-[350px] opacity-80" />
         <img src={patternSvgtop} alt="shape 1"
-          className="absolute top-5 right-0 md:w-[500px] w-[150px] opacity-80" />
+          className="-z-10 absolute top-5 right-0 md:w-[500px] w-[150px] opacity-80" />
         <Header />
-        <div className='flex flex-col gap-5'>
-          <FileUploader />
-          <InputSection />
+        <Form/>
+        <div >
+
         </div>
       </div>
-    </>
+
   )
 }
 

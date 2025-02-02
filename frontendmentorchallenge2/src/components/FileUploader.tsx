@@ -5,47 +5,69 @@ import icon_info from '../assets/icon-info.svg';
 
 import Button from "./Button";
 
-const FileUploader = () => {
+const FileUploader = ({ onFileSelect }: { onFileSelect: (file: File | null) => void }) => {
     const [file, setFile] = useState<File | null>(null);
+    const [error, setError] = useState<string | null>(null);
     const fileInputRef = useRef<HTMLInputElement>(null);
 
-    // ✅ Vérification : Afficher si l'input est bien attaché
-    console.log("fileInputRef:", fileInputRef.current);
-
-    // ✅ Fonction pour ouvrir la boîte de dialogue fichier
     const handleChooseFile = () => {
-        console.log("Bouton Change Image cliqué !");
         if (fileInputRef.current) {
-            console.log("fileInputRef trouvé ✅");
             fileInputRef.current.click();
-        } else {
-            console.error("fileInputRef est NULL ❌");
         }
     };
 
-    // ✅ Fonction qui gère le changement de fichier
+    const validateFile = (selectedFile: File) => {
+        if (!["image/jpeg", "image/png"].includes(selectedFile.type)) {
+            setError("Seuls les fichiers JPG et PNG sont autorisés.");
+            return false;
+        }
+        if (selectedFile.size > 500 * 1024) {
+            setError("File too large. Please upload a photo under 500KB.");
+            return false;
+        }
+        return true;
+    };
+
     const handleFileChange = (event: React.ChangeEvent<HTMLInputElement>) => {
         if (event.target.files && event.target.files.length > 0) {
-            setFile(event.target.files[0]);
+            const selectedFile = event.target.files[0];
+
+            if (validateFile(selectedFile)) {
+                setFile(selectedFile);
+                setError(null);
+                onFileSelect(selectedFile);
+            } else {
+                setFile(null);
+                onFileSelect(null);
+            }
         }
     };
 
-    // ✅ Gestion du drag & drop
     const onDrop = useCallback((acceptedFiles: File[]) => {
         if (acceptedFiles.length > 0) {
-            setFile(acceptedFiles[0]);
+            const selectedFile = acceptedFiles[0];
+
+            if (validateFile(selectedFile)) {
+                setFile(selectedFile);
+                setError(null);
+                onFileSelect(selectedFile);
+            } else {
+                setFile(null);
+                onFileSelect(null);
+            }
         }
-    }, []);
+    }, [onFileSelect]);
 
     const { getRootProps, getInputProps } = useDropzone({
         onDrop,
         maxFiles: 1,
-        accept: { 'image/*': [] }
+        accept: { "image/jpeg": [], "image/png": [] },
     });
 
-    // ✅ Fonction pour supprimer l’image sélectionnée
     const removeFile = () => {
         setFile(null);
+        setError(null);
+        onFileSelect(null);
     };
 
     return (
@@ -59,16 +81,16 @@ const FileUploader = () => {
                 type="file"
                 className="hidden"
                 onChange={handleFileChange}
-                onClick={(e) => e.stopPropagation()} 
+                onClick={(e) => e.stopPropagation()}
             />
 
             <div className="border-2 border-dashed border-[var(--neutral-300)] bg-white/10 backdrop-blur-sm p-6 rounded-xl w-full text-center cursor-pointer">
                 {file ? (
                     <div className="flex h-full flex-col items-center">
                         {file.type.startsWith("image/") && (
-                            <img 
-                                src={URL.createObjectURL(file)} 
-                                alt={file.name} 
+                            <img
+                                src={URL.createObjectURL(file)}
+                                alt={file.name}
                                 className="w-[70px] h-[70px] object-cover rounded-md shadow-md"
                             />
                         )}
@@ -90,10 +112,16 @@ const FileUploader = () => {
                     </div>
                 )}
             </div>
-            <div className="flex justify-start items-start w-full gap-2">
+
+            {error ?( <div className="flex flex-row gap-1">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="" viewBox="0 0 16 16"><path stroke="var(--orange-500)" stroke-linecap="round" stroke-linejoin="round" d="M2 8a6 6 0 1 0 12 0A6 6 0 0 0 2 8Z" /><path fill="var(--orange-500)" d="M8.004 10.462V7.596ZM8 5.57v-.042Z" /><path stroke="var(--orange-500)" stroke-linecap="round" stroke-linejoin="round" d="M8.004 10.462V7.596M8 5.569v-.042" /></svg>
+                <p className="text-[var(--orange-700)] text-xs ">{error}</p>
+            </div>):<div className="flex justify-start items-start w-full gap-2">
                 <img src={icon_info} alt="info" />
-                <p className="text-[var(--neutral-300)] text-xs">Upload your photo (Jpg or PNG, max size: 500kb).</p>
-            </div>
+                <p className="text-[var(--neutral-300)] text-xs">Upload your photo (JPG or PNG, max size: 500 KB).</p>
+            </div>}
+
+            
         </div>
     );
 };
