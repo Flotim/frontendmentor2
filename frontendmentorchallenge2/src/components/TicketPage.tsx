@@ -21,7 +21,7 @@ const TicketPage: React.FC<TicketPageProps> = ({ formData }) => {
                     <h1 className='max-w-[900px]  text-[var(--neutral-0)] text-3xl md:text-6xl font-semibold'>Congrats, <span className="bg-clip-text text-transparent"
                         style={{ backgroundImage: "linear-gradient(90deg, hsl(7, 86%, 67%), hsl(0, 0%, 100%))" }}>{formData.name}!</span> Your ticket is ready.</h1>
                     <h2 className='text-[var(--neutral-300)] text-xl'>We've emailed your ticket to <span className='text-[var(--orange-700)]'>{formData.email}</span> and will send update
-                        in the run up to the event</h2>
+                        in the run up to the event.</h2>
                 </div>
 
             </header>
