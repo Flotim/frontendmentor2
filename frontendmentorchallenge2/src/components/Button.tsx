@@ -12,7 +12,7 @@ const Button : React.FC<ButtonProps> = ({
     onClick,
 }) =>{
     return(
-        <button onClick={onClick} className="cursor-pointer mt-4 px-4 py-2 backdrop-blur-sm text-[var(--neutral-300)] rounded-md hover:backdrop-blur-xs">
+        <button type="button" onClick={onClick} className="cursor-pointer mt-4 px-4 py-2 backdrop-blur-sm text-[var(--neutral-300)] rounded-md hover:backdrop-blur-xs">
         {text}
     </button>
     )
